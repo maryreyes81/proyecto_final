@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clientes - Happy Burger</title>
+</head>
+<body>
+  <h1>Happy Burger 🍔 - Clientes</h1>
+
+  <h2>Lista de clientes</h2>
+  {% if clientes %}
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Clave</th>
+          <th>Nombre</th>
+          <th>Dirección</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in clientes %}
+          <!-- c = (clave, nombre, direccion, correo_electronico, telefono) -->
+          <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>
+              <a href="{{ url_for('clientes.clientes_ui_editar', clave=c[0]) }}">
+                Editar
+              </a>
+              |
+              <form action="{{ url_for('clientes.clientes_ui_eliminar', clave=c[0]) }}"
+                    method="post"
+                    style="display:inline;">
+                <button type="submit" onclick="return confirm('¿Eliminar cliente?')">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay clientes registrados.</p>
+  {% endif %}
+
+  <hr />
+
+  <h2>Agregar nuevo cliente</h2>
+  <form action="{{ url_for('clientes.clientes_ui_crear') }}" method="post">
+    <label>
+      Clave:
+      <input type="text" name="clave" required />
+    </label>
+    <br />
+    <label>
+      Nombre:
+      <input type="text" name="nombre" required />
+    </label>
+    <br />
+    <label>
+      Dirección:
+      <input type="text" name="direccion" />
+    </label>
+    <br />
+    <label>
+      Correo electrónico:
+      <input type="email" name="correo_electronico" />
+    </label>
+    <br />
+    <label>
+      Teléfono:
+      <input type="text" name="telefono" />
+    </label>
+    <br /><br />
+    <button type="submit">Guardar cliente</button>
+  </form>
+
+  <hr />
+  <p><a href="/">Volver al inicio</a></p>
+</body>
+</html>

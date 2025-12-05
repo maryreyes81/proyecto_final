@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editar cliente {{ cliente[0] }} - Happy Burger</title>
+</head>
+<body>
+  <h1>Editar cliente - Happy Burger 🍔</h1>
+
+  <!-- cliente = (clave, nombre, direccion, correo_electronico, telefono) -->
+
+  <form action="" method="post">
+    <p><strong>Clave:</strong> {{ cliente[0] }}</p>
+
+    <label>
+      Nombre:
+      <input type="text" name="nombre" value="{{ cliente[1] }}" required />
+    </label>
+    <br />
+    <label>
+      Dirección:
+      <input type="text" name="direccion" value="{{ cliente[2] or '' }}" />
+    </label>
+    <br />
+    <label>
+      Correo electrónico:
+      <input type="email" name="correo_electronico" value="{{ cliente[3] or '' }}" />
+    </label>
+    <br />
+    <label>
+      Teléfono:
+      <input type="text" name="telefono" value="{{ cliente[4] or '' }}" />
+    </label>
+    <br /><br />
+    <button type="submit">Guardar cambios</button>
+  </form>
+
+  <br />
+  <a href="{{ url_for('clientes.clientes_ui') }}">Volver a clientes</a>
+</body>
+</html>
