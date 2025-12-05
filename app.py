@@ -6,6 +6,8 @@ from routes.menu_producto_routes import menu_producto_routes
 from routes.pedido_routes import pedido_routes
 from routes.pedido_detalle_routes import pedido_detalle_routes
 
+#API web con Flask
+
 app = Flask(__name__)
 
 app.register_blueprint(cliente_routes)
