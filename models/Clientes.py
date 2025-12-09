@@ -21,6 +21,9 @@ class Clientes:
         """
         self.db = BaseDatos(db_name)
 
+    # =============================================================
+    # INSERTAR CLIENTE
+    # =============================================================
     def agregar_cliente(self, clave, nombre, direccion, correo_electronico, telefono):
         """
         Agregar cliente.
@@ -37,16 +40,20 @@ class Clientes:
             )
             conn.commit()
 
+    # =============================================================
+    # ELIMINAR CLIENTE
+    # =============================================================
     def eliminar_cliente(self, clave):
         """
-        Eliminar cliente.
-
-        Elimina un cliente por su clave.
+        Eliminar cliente por clave.
         """
         with self.db.get_connection() as conn:
             conn.execute("DELETE FROM Clientes WHERE clave = ?", (clave,))
             conn.commit()
 
+    # =============================================================
+    # ACTUALIZAR CLIENTE
+    # =============================================================
     def actualizar_cliente(
         self, clave, nombre=None, direccion=None, correo_electronico=None, telefono=None
     ):
@@ -66,7 +73,7 @@ class Clientes:
             ).fetchone()
 
             if not cliente:
-                return
+                return  # No existe
 
             _, nombre_actual, dir_actual, correo_actual, tel_actual = cliente
 
@@ -87,9 +94,13 @@ class Clientes:
             )
             conn.commit()
 
+    # =============================================================
+    # OBTENER TODOS
+    # =============================================================
     def obtener_todos(self):
         """
         Obtiene todos los clientes registrados.
+        Retorna una lista de filas.
         """
         with self.db.get_connection() as conn:
             return conn.execute(
@@ -99,13 +110,12 @@ class Clientes:
                 """
             ).fetchall()
 
+    # =============================================================
+    # OBTENER POR ID
+    # =============================================================
     def obtener_por_id(self, cliente_id):
         """
         Obtiene un cliente específico por su ID (PRIMARY KEY).
-
-        :param cliente_id: ID numérico del cliente (integer).
-        :return: Una fila con (id, clave, nombre, direccion, correo_electronico, telefono)
-                 o None si no existe.
         """
         with self.db.get_connection() as conn:
             return conn.execute(
@@ -115,4 +125,24 @@ class Clientes:
                 WHERE id = ?
                 """,
                 (cliente_id,),
+            ).fetchone()
+
+    # =============================================================
+    # OBTENER POR CLAVE  ← MÉTODO QUE FALTABA
+    # =============================================================
+    def obtener_por_clave(self, clave):
+        """
+        Obtiene un cliente por su CLAVE (ej. 'C01').
+
+        Retorna una fila con:
+        (id, clave, nombre, direccion, correo_electronico, telefono)
+        """
+        with self.db.get_connection() as conn:
+            return conn.execute(
+                """
+                SELECT id, clave, nombre, direccion, correo_electronico, telefono
+                FROM Clientes
+                WHERE clave = ?
+                """,
+                (clave,),
             ).fetchone()

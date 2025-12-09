@@ -4,15 +4,18 @@ clientes_routes.py
 Rutas Flask para manejar clientes en Happy Burger.
 """
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from models.clientes import Clientes
 
-# Crear Blueprint
+# Crear Blueprint (SOLO UNA VEZ)
 clientes_bp = Blueprint("clientes", __name__)
 
-# Instancia del modelo
+# Instancia del modelo (SOLO UNA VEZ)
 clientes_model = Clientes()
 
+# ==========================
+# RUTAS API JSON
+# ==========================
 
 @clientes_bp.route("/clientes", methods=["GET"])
 def obtener_clientes():
@@ -91,19 +94,10 @@ def eliminar_cliente(clave):
     clientes_model.eliminar_cliente(clave)
     return jsonify({"mensaje": "Cliente eliminado correctamente"}), 200
 
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for
-from models.clientes import Clientes
 
-# Crear Blueprint
-clientes_bp = Blueprint("clientes", __name__)
-
-# Instancia del modelo
-clientes_model = Clientes()
-
-# ⬆️ Todo esto ya lo tienes para la API JSON
-# ... (tus rutas GET/POST/PUT/DELETE existentes)
-# Ahora agregamos las de FRONT-END HTML 👇
-
+# ==========================
+# RUTAS FRONT-END HTML
+# ==========================
 
 @clientes_bp.route("/clientes/ui", methods=["GET"])
 def clientes_ui():
