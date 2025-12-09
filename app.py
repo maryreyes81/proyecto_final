@@ -37,19 +37,9 @@ def create_app():
     @app.route("/")
     def index():
         """
-        Página de inicio simple.
+        Página de inicio: muestra la página principal con formulario, etc.
         """
-        return (
-            "<h1>Happy Burger 🍔</h1>"
-            "<p>API y sistema de pedidos en funcionamiento.</p>"
-            "<p>Puedes usar las rutas:</p>"
-            "<ul>"
-            "<li>/clientes</li>"
-            "<li>/menu</li>"
-            "<li>/pedidos</li>"
-            "<li>/pedido/&lt;numero_pedido&gt; (vista HTML)</li>"
-            "</ul>"
-        )
+        return render_template("index.html")
 
     @app.route("/pedido/<int:numero_pedido>")
     def ver_pedido_html(numero_pedido):
