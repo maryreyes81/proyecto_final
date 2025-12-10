@@ -1,0 +1,88 @@
+# ===============================
+# 🚫 ENTORNOS VIRTUALES (NO SUBIR)
+# ===============================
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# ===============================
+# 🚫 ARCHIVOS DE PYTHON GENERADOS
+# ===============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# ===============================
+# 🚫 ARCHIVOS DE BASE DE DATOS
+# (SQLite no debe subirse a GitHub)
+# ===============================
+*.db
+*.sqlite3
+*.sqlite
+happy_burger.db
+
+# Si quieres subir una base de datos de ejemplo, comenta lo de arriba
+
+# ===============================
+# 🚫 ARCHIVOS Y CARPETAS TEMPORALES
+# ===============================
+*.log
+*.tmp
+*.temp
+
+# Carpetas de caché
+cache/
+tmp/
+logs/
+tickets/
+
+# ===============================
+# 🚫 CONFIGURACIONES LOCALES
+# ===============================
+*.env           # variables de entorno
+.env.*          # variantes
+.env.local      
+.env.development
+.env.production
+
+# Flask debug files
+instance/
+.flaskenv
+
+# ===============================
+# 🚫 CONFIGURACIÓN DE EDITORES
+# ===============================
+.vscode/
+.idea/
+*.iml
+
+# ===============================
+# 🚫 SISTEMAS OPERATIVOS
+# ===============================
+.DS_Store       # macOS
+Thumbs.db       # Windows
+desktop.ini     # Windows
+
+# ===============================
+# 🚫 ARCHIVOS DE RENDER Y BUILD
+# ===============================
+# En caso de que Render genere temporales
+build/
+dist/
+*.egg-info/
+
+# ===============================
+# 🚫 TODO LO GENERADO AUTOMÁTICAMENTE
+# ===============================
+*.bak
+*.swp
+*.swo
