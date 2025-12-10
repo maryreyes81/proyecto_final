@@ -1,0 +1,15 @@
+HAPPY BURGER
+Pedido #: 3
+
+Cliente: Bob Ross (ID 2)
+Dirección: Calle Pintor # 2
+Correo: bobross@mail.com
+Teléfono: 4544445634
+
+Productos:
+------------------------------
+- Hamburguesa con papas a la francesa  $160.00
+------------------------------
+TOTAL: $160.00
+
+¡Gracias por su compra!
