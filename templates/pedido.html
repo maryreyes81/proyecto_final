@@ -5,32 +5,14 @@
   <title>Pedido {{ pedido.numero_pedido }} - Happy Burger</title>
 </head>
 <body>
-  <h1>Happy Burger - Detalle del Pedido</h1>
+  <h1>Happy Burger - Detalle de Pedido</h1>
 
   <h2>Pedido #{{ pedido.numero_pedido }}</h2>
-
-  <p>
-    <strong>Cliente:</strong> 
-    {{ pedido.cliente_clave }} - {{ pedido.cliente_nombre }}
-  </p>
-
-  <p>
-    <strong>Producto:</strong> 
-    {{ pedido.producto_clave }} - {{ pedido.producto_nombre }}
-  </p>
-
-  <p>
-    <strong>Precio unitario:</strong> 
-    ${{ "%.2f"|format(pedido.precio_producto) }}
-  </p>
-
-  <p>
-    <strong>Total del pedido:</strong> 
-    ${{ "%.2f"|format(pedido.total_pedido) }}
-  </p>
+  <p><strong>Cliente:</strong> {{ pedido.cliente_nombre }}</p>
+  <p><strong>Producto:</strong> {{ pedido.producto_nombre }}</p>
+  <p><strong>Total a pagar:</strong> ${{ "%.2f"|format(pedido.total_pedido) }}</p>
 
   <hr />
-
   <p>Gracias por comprar en Happy Burger 🍔</p>
 </body>
 </html>

@@ -1,87 +1,43 @@
-"""
-menu_routes.py
----------------
-Rutas Flask para manejar el menú de productos de Happy Burger.
-"""
+# routes/menu_routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, redirect, url_for, render_template
 from models.menu import Menu
 
-# Crear Blueprint
 menu_bp = Blueprint("menu", __name__)
-
-# Instancia del modelo
 menu_model = Menu()
 
 
 @menu_bp.route("/menu", methods=["GET"])
-def obtener_menu():
+def listar_menu():
     """
-    GET /menu
-    Obtiene todos los productos del menú.
+    Página para ver el menú en una vista aparte (opcional).
     """
-    productos = menu_model.obtener_todos()
-    return jsonify(productos), 200
+    items = menu_model.obtener_menu()
+    return render_template("menu.html", menu_items=items)
 
 
-@menu_bp.route("/menu/<string:clave>", methods=["GET"])
-def obtener_producto(clave):
+@menu_bp.route("/menu/crear_form", methods=["POST"])
+def crear_producto_form():
     """
-    GET /menu/<clave>
-    Obtiene un producto del menú por su clave.
+    Recibe el formulario del index.html para agregar un producto al menú.
     """
-    producto = menu_model.obtener_por_clave(clave)
-    if producto:
-        return jsonify(producto), 200
-    return jsonify({"error": "Producto no encontrado"}), 404
+    nombre = request.form.get("nombre")
+    precio = request.form.get("precio")
+
+    try:
+        precio = float(precio)
+    except (TypeError, ValueError):
+        precio = 0.0
+
+    menu_model.agregar_producto(nombre, precio)
+    # Después de crear, regresa al index
+    return redirect(url_for("index"))
 
 
-@menu_bp.route("/menu", methods=["POST"])
-def crear_producto():
+@menu_bp.route("/menu/eliminar/<int:producto_id>", methods=["POST"])
+def eliminar_producto(producto_id):
     """
-    POST /menu
-    Crea un nuevo producto del menú.
-
-    Espera JSON:
-    {
-        "clave": "H01",
-        "nombre": "Hamburguesa Clásica",
-        "precio": 89.50
-    }
+    Eliminar un producto del menú.
     """
-    data = request.json
-
-    menu_model.agregar_producto(
-        data["clave"],
-        data["nombre"],
-        data["precio"]
-    )
-
-    return jsonify({"mensaje": "Producto agregado al menú"}), 201
-
-
-@menu_bp.route("/menu/<string:clave>", methods=["PUT"])
-def actualizar_producto(clave):
-    """
-    PUT /menu/<clave>
-    Actualiza un producto del menú.
-    """
-    data = request.json
-
-    menu_model.actualizar_producto(
-        clave,
-        data.get("nombre"),
-        data.get("precio")
-    )
-
-    return jsonify({"mensaje": "Producto actualizado correctamente"}), 200
-
-
-@menu_bp.route("/menu/<string:clave>", methods=["DELETE"])
-def eliminar_producto(clave):
-    """
-    DELETE /menu/<clave>
-    Elimina un producto del menú por su clave.
-    """
-    menu_model.eliminar_producto(clave)
-    return jsonify({"mensaje": "Producto eliminado del menú"}), 200
+    menu_model.eliminar_producto(producto_id)
+    return redirect(url_for("index"))

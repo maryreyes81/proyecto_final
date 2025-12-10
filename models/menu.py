@@ -1,8 +1,9 @@
+# models/menu.py
 """
 menu.py
 -------
-Módulo que contiene la clase Menu para el manejo del menú de productos
-de Happy Burger usando SQLite.
+Módulo que contiene la clase Menu para el manejo
+de los productos del menú de Happy Burger usando SQLite.
 """
 
 from db.database import BaseDatos
@@ -12,77 +13,90 @@ class Menu:
     """
     Clase Menu
     ----------
-    Administra los productos del menú utilizando la tabla Menu en SQLite.
+    Administra los productos usando la tabla Menu en SQLite.
     """
 
     def __init__(self, db_name="happy_burger.db"):
-        """Inicializa la clase Menu con una instancia de BaseDatos."""
+        """
+        Inicializa la clase Menu con una instancia de BaseDatos.
+        """
         self.db = BaseDatos(db_name)
 
-    def agregar_producto(self, clave, nombre, precio):
+    # CREATE
+    def agregar_producto(self, nombre, precio):
         """
-        Agregar producto.
-
-        Inserta un nuevo producto en la tabla Menu.
+        Agrega un producto al menú.
         """
         with self.db.get_connection() as conn:
             conn.execute(
-                "INSERT INTO Menu (clave, nombre, precio) VALUES (?, ?, ?)",
-                (clave, nombre, precio),
+                """
+                INSERT INTO Menu (nombre, precio)
+                VALUES (?, ?)
+                """,
+                (nombre, precio),
             )
             conn.commit()
 
-    def eliminar_producto(self, clave):
+    # READ - todos
+    def obtener_menu(self):
         """
-        Eliminar producto.
-
-        Elimina un producto por su clave.
-        """
-        with self.db.get_connection() as conn:
-            conn.execute("DELETE FROM Menu WHERE clave = ?", (clave,))
-            conn.commit()
-
-    def actualizar_producto(self, clave, nombre=None, precio=None):
-        """
-        Actualizar producto.
-
-        Actualiza nombre y/o precio del producto con la clave dada.
+        Obtener todos los productos del menú.
+        Devuelve lista de tuplas (id, nombre, precio).
         """
         with self.db.get_connection() as conn:
-            prod = conn.execute(
-                "SELECT id, nombre, precio FROM Menu WHERE clave = ?", (clave,)
-            ).fetchone()
+            cursor = conn.execute(
+                """
+                SELECT id, nombre, precio
+                FROM Menu
+                ORDER BY id
+                """
+            )
+            return cursor.fetchall()
 
-            if not prod:
-                return
+    # READ - por id
+    def obtener_producto_por_id(self, producto_id):
+        """
+        Obtener un producto por su id.
+        """
+        with self.db.get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT id, nombre, precio
+                FROM Menu
+                WHERE id = ?
+                """,
+                (producto_id,),
+            )
+            return cursor.fetchone()
 
-            _, nombre_actual, precio_actual = prod
-
-            nuevo_nombre = nombre if nombre is not None else nombre_actual
-            nuevo_precio = precio if precio is not None else precio_actual
-
+    # UPDATE
+    def actualizar_producto(self, producto_id, nombre, precio):
+        """
+        Actualizar un producto del menú.
+        """
+        with self.db.get_connection() as conn:
             conn.execute(
                 """
                 UPDATE Menu
                 SET nombre = ?, precio = ?
-                WHERE clave = ?
+                WHERE id = ?
                 """,
-                (nuevo_nombre, nuevo_precio, clave),
+                (nombre, precio, producto_id),
             )
             conn.commit()
 
-    def obtener_todos(self):
+    # DELETE
+    def eliminar_producto(self, producto_id):
         """
-        Obtiene todos los productos del menú.
+        Eliminar un producto del menú.
         """
         with self.db.get_connection() as conn:
-            return conn.execute("SELECT clave, nombre, precio FROM Menu").fetchall()
-def obtener_por_clave(self, clave):
-    """
-    Obtiene un solo producto del menú por su clave.
-    """
-    with self.db.get_connection() as conn:
-        return conn.execute(
-            "SELECT clave, nombre, precio FROM Menu WHERE clave = ?",
-            (clave,)
-        ).fetchone()
+            conn.execute(
+                """
+                DELETE FROM Menu
+                WHERE id = ?
+                """,
+                (producto_id,),
+            )
+            conn.commit()
+
