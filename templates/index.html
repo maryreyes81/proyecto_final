@@ -59,10 +59,6 @@
             background: #219150;
         }
 
-        .links a {
-            margin-right: 10px;
-        }
-
         .danger {
             background: #c0392b;
         }
@@ -79,20 +75,20 @@
     <div class="routes">
         <p><strong>Puedes usar las rutas:</strong></p>
         <ul>
-            <li><a href="/clientes">/clientes</a> — Listado de clientes (JSON)</li>
-            <li><a href="/menu">/menu</a> — Menú disponible (JSON)</li>
-            <li><a href="/pedidos">/pedidos</a> — Listado de pedidos (JSON)</li>
+            <li><a href="/clientes" target="_blank">/clientes</a> — Listado de clientes (JSON)</li>
+            <li><a href="/menu" target="_blank">/menu</a> — Menú disponible (JSON)</li>
+            <li><a href="/pedidos" target="_blank">/pedidos</a> — Listado de pedidos (JSON)</li>
             <li>/pedido/&lt;numero_pedido&gt; — Vista HTML de un pedido</li>
-            <li><a href="/clientes/ui">/clientes/ui</a> — CRUD visual de clientes</li>
-            <li><a href="/menu/ui">/menu/ui</a> — CRUD visual de menú</li>
+            <li><a href="/clientes/ui" target="_blank">/clientes/ui</a> — CRUD visual de clientes</li>
+            <li><a href="/menu/ui" target="_blank">/menu/ui</a> — CRUD visual de menú</li>
         </ul>
     </div>
 
     <!-- CREATE -->
     <div class="form-card">
         <h2>Crear nuevo cliente</h2>
-        <!-- Ajusta la action si quieres usar otra ruta, por ejemplo /clientes/ui/crear -->
-        <form method="post" action="/clientes">
+        <!-- usaremos una ruta especial para formularios: /clientes/crear_form  -->
+        <form method="post" action="/clientes/crear_form">
             <label for="clave">Clave</label>
             <input type="text" id="clave" name="clave" required>
 
@@ -103,6 +99,7 @@
             <input type="text" id="direccion" name="direccion">
 
             <label for="correo">Correo electrónico</label>
+            <!-- el name debe llamarse igual que en tu modelo: correo_electronico -->
             <input type="email" id="correo" name="correo_electronico">
 
             <label for="telefono">Teléfono</label>
@@ -112,28 +109,11 @@
         </form>
     </div>
 
-    <!-- READ (consulta) -->
-    <div class="form-card">
-        <h2>Consultar clientes</h2>
-        <p>
-            👉 Ver todos los clientes en formato JSON:
-            <a href="/clientes" target="_blank">/clientes</a>
-        </p>
-        <p>
-            👉 Ver un cliente por clave (JSON):  
-            <code>/clientes/&lt;clave&gt;</code>  
-            Ejemplo:
-            <a href="/clientes/C001" target="_blank">/clientes/C001</a> (si existe).
-        </p>
-    </div>
-
     <!-- UPDATE -->
     <div class="form-card">
         <h2>Actualizar cliente</h2>
         <p>Introduce la clave del cliente existente y los nuevos datos.</p>
-        <!-- Ajusta la action según tu ruta para actualizar; si usas /clientes/<clave> con PUT,
-             puedes crear una ruta especial para formularios, por ejemplo /clientes/ui/actualizar -->
-        <form method="post" action="/clientes/actualizar">
+        <form method="post" action="/clientes/actualizar_form">
             <label for="clave_update">Clave del cliente a actualizar</label>
             <input type="text" id="clave_update" name="clave" required>
 
@@ -157,9 +137,7 @@
     <div class="form-card">
         <h2>Eliminar cliente</h2>
         <p>Introduce la clave del cliente a eliminar.</p>
-        <!-- De nuevo, adapta la action a la ruta que definas para eliminar vía POST,
-             por ejemplo /clientes/ui/eliminar o similar -->
-        <form method="post" action="/clientes/eliminar">
+        <form method="post" action="/clientes/eliminar_form">
             <label for="clave_delete">Clave del cliente</label>
             <input type="text" id="clave_delete" name="clave" required>
 
