@@ -62,6 +62,14 @@
         .links a {
             margin-right: 10px;
         }
+
+        .danger {
+            background: #c0392b;
+        }
+
+        .danger:hover {
+            background: #992d22;
+        }
     </style>
 </head>
 <body>
@@ -71,15 +79,19 @@
     <div class="routes">
         <p><strong>Puedes usar las rutas:</strong></p>
         <ul>
-            <li><a href="/clientes">/clientes</a> — Listado de clientes</li>
-            <li><a href="/menu">/menu</a> — Menú disponible</li>
-            <li><a href="/pedidos">/pedidos</a> — Listado de pedidos</li>
+            <li><a href="/clientes">/clientes</a> — Listado de clientes (JSON)</li>
+            <li><a href="/menu">/menu</a> — Menú disponible (JSON)</li>
+            <li><a href="/pedidos">/pedidos</a> — Listado de pedidos (JSON)</li>
             <li>/pedido/&lt;numero_pedido&gt; — Vista HTML de un pedido</li>
+            <li><a href="/clientes/ui">/clientes/ui</a> — CRUD visual de clientes</li>
+            <li><a href="/menu/ui">/menu/ui</a> — CRUD visual de menú</li>
         </ul>
     </div>
 
+    <!-- CREATE -->
     <div class="form-card">
-        <h2>Agregar nuevo cliente</h2>
+        <h2>Crear nuevo cliente</h2>
+        <!-- Ajusta la action si quieres usar otra ruta, por ejemplo /clientes/ui/crear -->
         <form method="post" action="/clientes">
             <label for="clave">Clave</label>
             <input type="text" id="clave" name="clave" required>
@@ -91,12 +103,67 @@
             <input type="text" id="direccion" name="direccion">
 
             <label for="correo">Correo electrónico</label>
-            <input type="email" id="correo" name="correo">
+            <input type="email" id="correo" name="correo_electronico">
 
             <label for="telefono">Teléfono</label>
             <input type="text" id="telefono" name="telefono">
 
             <button type="submit">Guardar cliente</button>
+        </form>
+    </div>
+
+    <!-- READ (consulta) -->
+    <div class="form-card">
+        <h2>Consultar clientes</h2>
+        <p>
+            👉 Ver todos los clientes en formato JSON:
+            <a href="/clientes" target="_blank">/clientes</a>
+        </p>
+        <p>
+            👉 Ver un cliente por clave (JSON):  
+            <code>/clientes/&lt;clave&gt;</code>  
+            Ejemplo:
+            <a href="/clientes/C001" target="_blank">/clientes/C001</a> (si existe).
+        </p>
+    </div>
+
+    <!-- UPDATE -->
+    <div class="form-card">
+        <h2>Actualizar cliente</h2>
+        <p>Introduce la clave del cliente existente y los nuevos datos.</p>
+        <!-- Ajusta la action según tu ruta para actualizar; si usas /clientes/<clave> con PUT,
+             puedes crear una ruta especial para formularios, por ejemplo /clientes/ui/actualizar -->
+        <form method="post" action="/clientes/actualizar">
+            <label for="clave_update">Clave del cliente a actualizar</label>
+            <input type="text" id="clave_update" name="clave" required>
+
+            <label for="nombre_update">Nuevo nombre</label>
+            <input type="text" id="nombre_update" name="nombre">
+
+            <label for="direccion_update">Nueva dirección</label>
+            <input type="text" id="direccion_update" name="direccion">
+
+            <label for="correo_update">Nuevo correo electrónico</label>
+            <input type="email" id="correo_update" name="correo_electronico">
+
+            <label for="telefono_update">Nuevo teléfono</label>
+            <input type="text" id="telefono_update" name="telefono">
+
+            <button type="submit">Actualizar cliente</button>
+        </form>
+    </div>
+
+    <!-- DELETE -->
+    <div class="form-card">
+        <h2>Eliminar cliente</h2>
+        <p>Introduce la clave del cliente a eliminar.</p>
+        <!-- De nuevo, adapta la action a la ruta que definas para eliminar vía POST,
+             por ejemplo /clientes/ui/eliminar o similar -->
+        <form method="post" action="/clientes/eliminar">
+            <label for="clave_delete">Clave del cliente</label>
+            <input type="text" id="clave_delete" name="clave" required>
+
+            <button type="submit" class="danger">Eliminar cliente</button>
         </form>
     </div>
 
