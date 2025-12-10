@@ -23,6 +23,24 @@
             margin-top: 40px;
         }
 
+        h3 {
+            margin-top: 20px;
+        }
+
+        .routes {
+            background: #fff3e0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .routes code {
+            background: #ffe0b2;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
         .form-card {
             background: #ffffff;
             padding: 20px;
@@ -75,6 +93,10 @@
             gap: 6px;
         }
 
+        .actions form {
+            margin: 0;
+        }
+
         .edit-btn,
         .delete-btn {
             padding: 6px 10px;
@@ -84,6 +106,7 @@
             cursor: pointer;
             text-decoration: none;
             color: white;
+            display: inline-block;
         }
 
         .edit-btn {
@@ -93,6 +116,11 @@
         .delete-btn {
             background: #e74c3c;
         }
+
+        .small {
+            font-size: 0.85rem;
+            color: #666;
+        }
     </style>
 </head>
 
@@ -101,10 +129,19 @@
 <h1>Happy Burger 🍔</h1>
 
 <div class="routes">
-    <strong>Rutas principales (ejemplo):</strong><br>
-    Clientes: <code>GET /clientes</code>, <code>POST /clientes/crear_form</code>, <code>POST /clientes/eliminar/&lt;id&gt;</code><br>
-    Menú: <code>GET /menu</code>, <code>POST /menu/crear_form</code>, <code>POST /menu/eliminar/&lt;id&gt;</code><br>
-    Pedidos: <code>GET /pedidos</code>, <code>POST /pedidos/crear_form</code>, <code>POST /pedidos/eliminar/&lt;id&gt;</code>
+    <strong>Rutas principales:</strong><br>
+    Clientes:
+    <code>GET /clientes</code>,
+    <code>POST /clientes/crear_form</code>,
+    <code>POST /clientes/eliminar/&lt;id&gt;</code><br>
+    Menú:
+    <code>GET /menu</code>,
+    <code>POST /menu/crear_form</code>,
+    <code>POST /menu/eliminar/&lt;id&gt;</code><br>
+    Pedidos:
+    <code>GET /pedidos</code>,
+    <code>POST /pedidos/crear_form</code>,
+    <code>POST /pedidos/eliminar/&lt;id&gt;</code>
 </div>
 
 <!-- ======================= CLIENTES ======================= -->
@@ -112,7 +149,6 @@
 
 <div class="form-card">
     <h3>Alta rápida de clientes</h3>
-
     <form method="POST" action="/clientes/crear_form">
         <label>Nombre</label>
         <input name="nombre" required>
@@ -134,25 +170,34 @@
 
 <table>
     <tr>
-        <th>ID</th><th>Nombre</th><th>Dirección</th><th>Correo</th><th>Teléfono</th><th>Acciones</th>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
     </tr>
 
-    {% for c in clientes %}
-    <tr>
-        <td>{{ c[0] }}</td>
-        <td>{{ c[1] }}</td>
-        <td>{{ c[2] }}</td>
-        <td>{{ c[3] }}</td>
-        <td>{{ c[4] }}</td>
-
-        <td class="actions">
-            <a href="/clientes/editar/{{ c[0] }}" class="edit-btn">Editar</a>
-            <form method="POST" action="/clientes/eliminar/{{ c[0] }}">
-                <button class="delete-btn">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
+    {% if clientes %}
+        {% for c in clientes %}
+        <tr>
+            <!-- (id, nombre, direccion, correo, telefono) -->
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td class="actions">
+                <a href="/clientes/editar/{{ c[0] }}" class="edit-btn">Editar</a>
+                <form method="POST" action="/clientes/eliminar/{{ c[0] }}">
+                    <button type="submit" class="delete-btn">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr><td colspan="6">No hay clientes registrados.</td></tr>
+    {% endif %}
 </table>
 
 
@@ -161,13 +206,12 @@
 
 <div class="form-card">
     <h3>Agregar producto al menú</h3>
-
     <form method="POST" action="/menu/crear_form">
         <label>Nombre del producto</label>
         <input name="nombre" required>
 
         <label>Precio ($)</label>
-        <input name="precio" required>
+        <input name="precio" type="number" step="0.01" required>
 
         <button type="submit">Agregar producto</button>
     </form>
@@ -177,24 +221,30 @@
 
 <table>
     <tr>
-        <th>ID</th><th>Nombre</th><th>Precio</th><th>Acciones</th>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Acciones</th>
     </tr>
 
-    {% for m in menu_items %}
-    <tr>
-        <td>{{ m[0] }}</td>
-        <td>{{ m[1] }}</td>
-        <td>${{ "%.2f"|format(m[2]) }}</td>
-
-        <td class="actions">
-            <a href="/menu/editar/{{ m[0] }}" class="edit-btn">Editar</a>
-
-            <form method="POST" action="/menu/eliminar/{{ m[0] }}">
-                <button class="delete-btn">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
+    {% if menu_items %}
+        {% for m in menu_items %}
+        <tr>
+            <!-- (id, nombre, precio) -->
+            <td>{{ m[0] }}</td>
+            <td>{{ m[1] }}</td>
+            <td>${{ "%.2f"|format(m[2]) }}</td>
+            <td class="actions">
+                <a href="/menu/editar/{{ m[0] }}" class="edit-btn">Editar</a>
+                <form method="POST" action="/menu/eliminar/{{ m[0] }}">
+                    <button type="submit" class="delete-btn">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr><td colspan="4">No hay productos en el menú.</td></tr>
+    {% endif %}
 </table>
 
 
@@ -202,51 +252,62 @@
 <h2>Pedidos</h2>
 
 <div class="form-card">
-    <h3>Crear pedido</h3>
-    <p><strong>Nota:</strong> El precio se toma automáticamente según el producto del menú.</p>
+    <h3>Crear pedido / agregar línea</h3>
+    <p class="small">
+        Usa el mismo <strong>No. Pedido</strong> para agregar varios productos al mismo pedido.<br>
+        El <strong>precio</strong> se toma automáticamente del menú según el Producto (ID).
+    </p>
 
     <form method="POST" action="/pedidos/crear_form">
         <label>No. Pedido</label>
-        <input name="pedido" required>
+        <input name="pedido" type="number" required>
 
         <label>Cliente (ID)</label>
-        <input name="cliente_id" required>
+        <input name="cliente_id" type="number" required>
 
         <label>Producto (ID)</label>
-        <input name="producto_id" required>
+        <input name="producto_id" type="number" required>
 
-        <button type="submit">Crear pedido</button>
+        <button type="submit">Agregar al pedido</button>
     </form>
 </div>
 
-<h3>Lista de pedidos</h3>
+<h3>Lista de líneas de pedido</h3>
 
 <table>
     <tr>
-        <th>ID</th><th>No. Pedido</th><th>Cliente ID</th><th>Producto ID</th><th>Precio</th><th>Acciones</th>
+        <th>ID</th>
+        <th>No. Pedido</th>
+        <th>Cliente ID</th>
+        <th>Producto ID</th>
+        <th>Precio</th>
+        <th>Acciones</th>
     </tr>
 
-    {% for p in pedidos %}
-    <tr>
-        <td>{{ p[0] }}</td>
-        <td>{{ p[1] }}</td>
-        <td>{{ p[2] }}</td>
-        <td>{{ p[3] }}</td>
-        <td>${{ "%.2f"|format(p[4]) }}</td>
-
-        <td class="actions">
-            <a href="/pedidos/editar/{{ p[0] }}" class="edit-btn">Editar</a>
-
-            <form method="POST" action="/pedidos/eliminar/{{ p[0] }}" style="display:inline;">
-                <button class="delete-btn">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
+    {% if pedidos %}
+        {% for p in pedidos %}
+        <tr>
+            <!-- (id, pedido, cliente_id, producto_id, precio) -->
+            <td>{{ p[0] }}</td>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>{{ p[3] }}</td>
+            <td>${{ "%.2f"|format(p[4]) }}</td>
+            <td class="actions">
+                <a href="/pedidos/editar/{{ p[0] }}" class="edit-btn">Editar</a>
+                <form method="POST" action="/pedidos/eliminar/{{ p[0] }}" style="display:inline;">
+                    <button type="submit" class="delete-btn">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr><td colspan="6">No hay pedidos registrados.</td></tr>
+    {% endif %}
 </table>
 
 
-<!-- ======================= TOTALES ======================= -->
+<!-- ======================= RESUMEN DE TOTALES ======================= -->
 <h2>Resumen de totales por pedido</h2>
 
 <table>
@@ -255,6 +316,7 @@
         <th>Cliente ID</th>
         <th>Cantidad de productos</th>
         <th>Total ($)</th>
+        <th>Ticket</th>
     </tr>
 
     {% if totales_pedidos %}
@@ -265,10 +327,13 @@
             <td>{{ t[1] }}</td>
             <td>{{ t[2] }}</td>
             <td>${{ "%.2f"|format(t[3]) }}</td>
+            <td>
+                <a href="/pedidos/ticket/{{ t[0] }}">Ver ticket</a>
+            </td>
         </tr>
         {% endfor %}
     {% else %}
-        <tr><td colspan="4">No hay totales para mostrar.</td></tr>
+        <tr><td colspan="5">No hay totales para mostrar.</td></tr>
     {% endif %}
 </table>
 

@@ -87,10 +87,42 @@ class Pedidos:
                 """
             ).fetchall()
 
+    def obtener_ticket(self, pedido_num):
+        """
+        Devuelve las líneas de un pedido con datos de cliente y producto.
+
+        Cada fila:
+        (pedido, cliente_id, cliente_nombre, direccion, correo, telefono,
+         producto_nombre, producto_id, precio)
+        """
+        with self.db.get_connection() as conn:
+            return conn.execute(
+                """
+                SELECT 
+                    p.pedido,
+                    c.id            AS cliente_id,
+                    c.nombre        AS cliente_nombre,
+                    c.direccion,
+                    c.correo_electronico,
+                    c.telefono,
+                    m.nombre        AS producto_nombre,
+                    p.producto_id,
+                    p.precio
+                FROM Pedido p
+                JOIN Clientes c ON p.cliente_id = c.id
+                JOIN Menu m     ON p.producto_id = m.id
+                WHERE p.pedido = ?
+                ORDER BY p.id
+                """,
+                (pedido_num,),
+            ).fetchall()
+
     def obtener_por_id(self, linea_id):
         """
         Obtiene una línea de pedido por su ID (columna id).
-        Devuelve tupla: (id, pedido, cliente_id, producto_id, precio)
+
+        Devuelve tupla:
+        (id, pedido, cliente_id, producto_id, precio)
         """
         with self.db.get_connection() as conn:
             return conn.execute(
