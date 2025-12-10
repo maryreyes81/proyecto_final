@@ -9,18 +9,12 @@ menu_model = Menu()
 
 @menu_bp.route("/menu", methods=["GET"])
 def listar_menu():
-    """
-    Página para ver el menú en una vista aparte (opcional).
-    """
     items = menu_model.obtener_menu()
     return render_template("menu.html", menu_items=items)
 
 
 @menu_bp.route("/menu/crear_form", methods=["POST"])
-def crear_producto_form():
-    """
-    Recibe el formulario del index.html para agregar un producto al menú.
-    """
+def crear_menu_form():
     nombre = request.form.get("nombre")
     precio = request.form.get("precio")
 
@@ -30,14 +24,35 @@ def crear_producto_form():
         precio = 0.0
 
     menu_model.agregar_producto(nombre, precio)
-    # Después de crear, regresa al index
     return redirect(url_for("index"))
 
 
-@menu_bp.route("/menu/eliminar/<int:producto_id>", methods=["POST"])
-def eliminar_producto(producto_id):
-    """
-    Eliminar un producto del menú.
-    """
-    menu_model.eliminar_producto(producto_id)
+@menu_bp.route("/menu/eliminar/<int:item_id>", methods=["POST"])
+def eliminar_menu_item(item_id):
+    menu_model.eliminar_producto(item_id)
     return redirect(url_for("index"))
+
+
+@menu_bp.route("/menu/editar/<int:item_id>", methods=["GET"])
+def editar_menu_item(item_id):
+    item = menu_model.obtener_por_id(item_id)
+    if not item:
+        return redirect(url_for("index"))
+    return render_template("editar_menu.html", item=item)
+
+
+@menu_bp.route("/menu/actualizar_form", methods=["POST"])
+def actualizar_menu_form():
+    item_id = request.form.get("id")
+    nombre = request.form.get("nombre")
+    precio = request.form.get("precio")
+
+    try:
+        item_id = int(item_id)
+        precio = float(precio)
+    except (TypeError, ValueError):
+        return redirect(url_for("index"))
+
+    menu_model.actualizar_producto(item_id, nombre, precio)
+    return redirect(url_for("index"))
+

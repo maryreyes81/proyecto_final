@@ -1,41 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Editar cliente {{ cliente[0] }} - Happy Burger</title>
+    <meta charset="utf-8">
+    <title>Editar cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f7f7f7;
+        }
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        label {
+            display:block;
+            margin-top:10px;
+            font-weight:bold;
+        }
+        input {
+            width:100%;
+            padding:8px;
+            margin-top:4px;
+            box-sizing:border-box;
+        }
+        button {
+            margin-top:15px;
+            padding:8px 14px;
+            border:none;
+            border-radius:4px;
+            background:#e67e22;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+        }
+        a {
+            display:inline-block;
+            margin-top:10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Editar cliente - Happy Burger 🍔</h1>
+    <div class="card">
+        <h2>Editar cliente</h2>
 
-  <!-- cliente = (clave, nombre, direccion, correo_electronico, telefono) -->
+        <form method="POST" action="/clientes/actualizar_form">
+            <!-- ID oculto -->
+            <input type="hidden" name="id" value="{{ cliente[0] }}">
 
-  <form action="" method="post">
-    <p><strong>Clave:</strong> {{ cliente[0] }}</p>
+            <label>Nombre</label>
+            <input name="nombre" value="{{ cliente[1] }}" required>
 
-    <label>
-      Nombre:
-      <input type="text" name="nombre" value="{{ cliente[1] }}" required />
-    </label>
-    <br />
-    <label>
-      Dirección:
-      <input type="text" name="direccion" value="{{ cliente[2] or '' }}" />
-    </label>
-    <br />
-    <label>
-      Correo electrónico:
-      <input type="email" name="correo_electronico" value="{{ cliente[3] or '' }}" />
-    </label>
-    <br />
-    <label>
-      Teléfono:
-      <input type="text" name="telefono" value="{{ cliente[4] or '' }}" />
-    </label>
-    <br /><br />
-    <button type="submit">Guardar cambios</button>
-  </form>
+            <label>Dirección</label>
+            <input name="direccion" value="{{ cliente[2] }}">
 
-  <br />
-  <a href="{{ url_for('clientes.clientes_ui') }}">Volver a clientes</a>
+            <label>Correo electrónico</label>
+            <input name="correo_electronico" type="email" value="{{ cliente[3] }}">
+
+            <label>Teléfono</label>
+            <input name="telefono" value="{{ cliente[4] }}">
+
+            <button type="submit">Guardar cambios</button>
+        </form>
+
+        <a href="{{ url_for('index') }}">← Volver al inicio</a>
+    </div>
 </body>
 </html>
+

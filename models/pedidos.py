@@ -87,6 +87,40 @@ class Pedidos:
                 """
             ).fetchall()
 
+    def obtener_por_id(self, linea_id):
+        """
+        Obtiene una línea de pedido por su ID (columna id).
+        Devuelve tupla: (id, pedido, cliente_id, producto_id, precio)
+        """
+        with self.db.get_connection() as conn:
+            return conn.execute(
+                """
+                SELECT id, pedido, cliente_id, producto_id, precio
+                FROM Pedido
+                WHERE id = ?
+                """,
+                (linea_id,),
+            ).fetchone()
+
+    def actualizar_linea(self, linea_id, pedido_num, cliente_id, producto_id):
+        """
+        Actualiza una línea de pedido. El precio se recalcula
+        tomando el precio del producto en el menú.
+        """
+        with self.db.get_connection() as conn:
+            conn.execute(
+                """
+                UPDATE Pedido
+                SET pedido      = ?,
+                    cliente_id  = ?,
+                    producto_id = ?,
+                    precio      = (SELECT precio FROM Menu WHERE id = ?)
+                WHERE id = ?
+                """,
+                (pedido_num, cliente_id, producto_id, producto_id, linea_id),
+            )
+            conn.commit()
+
     def eliminar_pedido(self, pedido_id):
         """
         Elimina una línea de pedido por su ID (columna 'id').
@@ -96,4 +130,3 @@ class Pedidos:
         with self.db.get_connection() as conn:
             conn.execute("DELETE FROM Pedido WHERE id = ?", (pedido_id,))
             conn.commit()
-
