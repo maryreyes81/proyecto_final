@@ -18,18 +18,23 @@ class Pedidos:
     def __init__(self, db_name="happy_burger.db"):
         self.db = BaseDatos(db_name)
 
-    def agregar_pedido(self, pedido_num, cliente_id, producto_id, precio):
+    def agregar_pedido(self, pedido_num, cliente_id, producto_id):
         """
         Inserta un nuevo pedido en la tabla Pedido.
-        pedido_num => campo 'pedido' (número de pedido, UNIQUE).
+        El precio NO se recibe desde el formulario, se toma del Menu.
+        - pedido_num -> campo 'pedido' (número del pedido, UNIQUE)
+        - precio -> se obtiene de Menu.precio donde Menu.id = producto_id
         """
         with self.db.get_connection() as conn:
+            # Usamos INSERT ... SELECT para tomar el precio del producto
             conn.execute(
                 """
                 INSERT INTO Pedido (pedido, cliente_id, producto_id, precio)
-                VALUES (?, ?, ?, ?)
+                SELECT ?, ?, ?, precio
+                FROM Menu
+                WHERE id = ?
                 """,
-                (pedido_num, cliente_id, producto_id, precio),
+                (pedido_num, cliente_id, producto_id, producto_id),
             )
             conn.commit()
 
@@ -54,3 +59,4 @@ class Pedidos:
         with self.db.get_connection() as conn:
             conn.execute("DELETE FROM Pedido WHERE id = ?", (pedido_id,))
             conn.commit()
+
