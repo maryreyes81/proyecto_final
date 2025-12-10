@@ -257,9 +257,10 @@
         <th>Total ($)</th>
     </tr>
 
-    {% if totales %}
-        {% for t in totales %}
+    {% if totales_pedidos %}
+        {% for t in totales_pedidos %}
         <tr>
+            <!-- t = (pedido, cliente_id, num_items, total) -->
             <td>{{ t[0] }}</td>
             <td>{{ t[1] }}</td>
             <td>{{ t[2] }}</td>
