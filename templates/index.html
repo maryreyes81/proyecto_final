@@ -86,28 +86,27 @@
 
     <!-- CREATE -->
     <div class="form-card">
-        <h2>Crear nuevo cliente</h2>
-        <!-- usaremos una ruta especial para formularios: /clientes/crear_form  -->
-        <form method="post" action="/clientes/crear_form">
-            <label for="clave">Clave</label>
-            <input type="text" id="clave" name="clave" required>
+    <h2>Crear nuevo cliente</h2>
+    <!-- IMPORTANTE: usar /clientes/crear_form -->
+    <form method="post" action="/clientes/crear_form">
+        <label for="clave">Clave</label>
+        <input type="text" id="clave" name="clave" required>
 
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
 
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" name="direccion">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" name="direccion">
 
-            <label for="correo">Correo electrónico</label>
-            <!-- el name debe llamarse igual que en tu modelo: correo_electronico -->
-            <input type="email" id="correo" name="correo_electronico">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" name="correo_electronico">
 
-            <label for="telefono">Teléfono</label>
-            <input type="text" id="telefono" name="telefono">
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" name="telefono">
 
-            <button type="submit">Guardar cliente</button>
-        </form>
-    </div>
+        <button type="submit">Guardar cliente</button>
+    </form>
+</div>
 
     <!-- UPDATE -->
     <div class="form-card">
