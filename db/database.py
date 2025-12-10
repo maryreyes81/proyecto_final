@@ -64,13 +64,13 @@ class BaseDatos:
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS Pedido (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    pedido INTEGER NOT NULL UNIQUE,
-                    cliente_id INTEGER NOT NULL,
-                    producto_id INTEGER NOT NULL,
-                    precio REAL NOT NULL,
-                    FOREIGN KEY (cliente_id) REFERENCES Clientes(id) ON DELETE CASCADE,
-                    FOREIGN KEY (producto_id) REFERENCES Menu(id)
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pedido INTEGER NOT NULL,
+        cliente_id INTEGER NOT NULL,
+        producto_id INTEGER NOT NULL,
+        precio REAL NOT NULL,
+        FOREIGN KEY (cliente_id) REFERENCES Clientes(id) ON DELETE CASCADE,
+        FOREIGN KEY (producto_id) REFERENCES Menu(id)
                 )
                 """
             )

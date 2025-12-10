@@ -16,17 +16,26 @@ class Pedidos:
     """
 
     def __init__(self, db_name="happy_burger.db"):
+        """
+        Inicializa la clase Pedidos con una instancia de BaseDatos.
+        """
         self.db = BaseDatos(db_name)
 
     def agregar_pedido(self, pedido_num, cliente_id, producto_id):
         """
-        Inserta un nuevo pedido en la tabla Pedido.
-        El precio NO se recibe desde el formulario, se toma del Menu.
-        - pedido_num -> campo 'pedido' (número del pedido, UNIQUE)
-        - precio -> se obtiene de Menu.precio donde Menu.id = producto_id
+        Inserta un nuevo registro en la tabla Pedido.
+
+        IMPORTANTE:
+        - El precio NO se recibe desde el formulario.
+        - El precio se toma automáticamente de la tabla Menu,
+          usando el producto_id.
+
+        Cada llamada a este método inserta una "línea" del pedido:
+        un número de pedido + un producto.
+        De esta forma se pueden tener varios productos con el mismo
+        número de pedido.
         """
         with self.db.get_connection() as conn:
-            # Usamos INSERT ... SELECT para tomar el precio del producto
             conn.execute(
                 """
                 INSERT INTO Pedido (pedido, cliente_id, producto_id, precio)
@@ -40,21 +49,49 @@ class Pedidos:
 
     def obtener_pedidos(self):
         """
-        Obtiene todos los pedidos registrados.
-        Devuelve lista de tuplas: (id, pedido, cliente_id, producto_id, precio)
+        Obtiene todas las líneas de pedidos registradas.
+
+        Devuelve lista de tuplas:
+        (id, pedido, cliente_id, producto_id, precio)
         """
         with self.db.get_connection() as conn:
             return conn.execute(
                 """
                 SELECT id, pedido, cliente_id, producto_id, precio
                 FROM Pedido
-                ORDER BY id
+                ORDER BY pedido, id
+                """
+            ).fetchall()
+
+    def obtener_totales_pedidos(self):
+        """
+        Devuelve un resumen por número de pedido:
+        (pedido, cliente_id, num_items, total)
+
+        - pedido: número de pedido (puede tener varias líneas)
+        - cliente_id: ID del cliente asociado a ese pedido
+        - num_items: cuántos productos hay en ese pedido
+        - total: suma de los precios de todas las líneas de ese pedido
+        """
+        with self.db.get_connection() as conn:
+            return conn.execute(
+                """
+                SELECT 
+                    pedido, 
+                    cliente_id, 
+                    COUNT(*) AS num_items,
+                    SUM(precio) AS total
+                FROM Pedido
+                GROUP BY pedido, cliente_id
+                ORDER BY pedido
                 """
             ).fetchall()
 
     def eliminar_pedido(self, pedido_id):
         """
-        Elimina un pedido por su ID.
+        Elimina una línea de pedido por su ID (columna 'id').
+        No borra todas las líneas con el mismo número de pedido,
+        solo la fila específica.
         """
         with self.db.get_connection() as conn:
             conn.execute("DELETE FROM Pedido WHERE id = ?", (pedido_id,))
