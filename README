@@ -1,0 +1,74 @@
+# 🍔 Happy Burger – Sistema de Gestión (Clientes, Menú, Pedidos y Tickets)
+
+Happy Burger es una aplicación web desarrollada en **Flask (Python)** que permite administrar:
+
+- 👤 **Clientes**
+- 📋 **Menú**
+- 🛒 **Pedidos con múltiples productos**
+- 🧾 **Generación de tickets (HTML + TXT)**
+
+Está diseñada como un proyecto escolar/profesional de backend, utilizando **SQLite** como base de datos local y una estructura MVC simple y clara.
+
+---
+
+## 🚀 Características principales
+
+### ✔ CRUD de Clientes
+- Crear, editar, listar y eliminar clientes.
+- Campos: nombre, dirección, correo, teléfono.
+
+### ✔ CRUD de Menú
+- Agregar productos con nombre y precio.
+- Editar/eliminar productos fácilmente.
+
+### ✔ CRUD de Pedidos (línea por línea)
+- Cada pedido puede tener **muchos productos**.
+- El precio se calcula **automáticamente** a partir del menú.
+- Los pedidos se agrupan por número de pedido.
+- Resumen de totales por pedido.
+
+### ✔ Tickets automáticos
+- Vista HTML imprimible.
+- Botón de descargar **ticket en .txt**.
+- Se guardan en la carpeta `tickets/`.
+
+---
+
+## 🛠 Tecnologías utilizadas
+
+- **Python 3**
+- **Flask 2.x**
+- **SQLite**
+- **Jinja2**
+- **HTML/CSS**
+- **Gunicorn** (solo para deploy)
+- **Render** (opcional para hosting)
+
+---
+
+## 📁 Estructura del proyecto
+
+proyecto_final/
+│ app.py
+│ requirements.txt
+│ Procfile
+│ happy_burger.db
+├── db/
+│ database.py
+├── models/
+│ clientes.py
+│ menu.py
+│ pedidos.py
+├── routes/
+│ clientes_routes.py
+│ menu_routes.py
+│ pedidos_routes.py
+├── templates/
+│ index.html
+│ ticket.html
+│ editar_cliente.html
+│ editar_menu.html
+│ editar_pedido.html
+├── tickets/
+│ (archivos .txt generados)
+└── venv/ (no se sube al repo)
